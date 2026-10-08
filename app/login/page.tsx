@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function LoginPage() {
+function LoginContent() {
   const params = useSearchParams();
   const needsSetup = params.get("setup") === "1";
   const [password, setPassword] = useState("");
@@ -87,5 +87,25 @@ export default function LoginPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+function LoginFallback() {
+  return (
+    <main className="login-page">
+      <section className="login-card">
+        <div className="eyebrow">PRIVATE CONTROL CENTER</div>
+        <h1>Dekan Admin</h1>
+        <p className="muted">Giriş ekranı hazırlanıyor...</p>
+      </section>
+    </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginFallback />}>
+      <LoginContent />
+    </Suspense>
   );
 }
